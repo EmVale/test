@@ -9,6 +9,7 @@ var betsize = 1;
 var spinning = 0;
 var menu = false;
 var quickspin = false;
+var imgsize = Math.min(width*0.1, height*0.14);
 
 var balance = 500.00;
 
@@ -22,6 +23,13 @@ const menubox = {x:0, y:height*0.85, width:width*0.1, height:height*0.15};
 const spinbox = {x:width*0.85, y:height*0.65, width:width*0.1, height:height*0.15};
 const quickspinbox = {x:0, y:height*0.75, width:width*0.15, height:height*0.1};
 
+//loading images
+var xqcM = new Image();
+xqcM.src = './Images/xqcM.png';
+xqcM.onload = () => {
+    drawframe();
+};
+
 //main function to draw the outer board
 function drawframe(){
 
@@ -32,6 +40,10 @@ function drawframe(){
     //bottom menu bar background
     ctx.fillStyle = 'rgb(105, 101, 93, 0.5)';
     ctx.fillRect(0, height*0.85, width, height*0.15);
+
+    //reel background
+    ctx.fillStyle = 'rgb(106, 121, 145, 0.5)';
+    ctx.fillRect(width*0.19, 0, width*0.62, height*0.85);
 
     //bottom left options button
     ctx.fillStyle = 'rgb(73, 123, 204, 0.5)';
@@ -65,21 +77,22 @@ function drawframe(){
     ctx.fillStyle = 'rgb(43, 117, 73, 0.5)';
     ctx.fillRect(width*0.85, height*0.65, width*0.1, height*0.15);
 
-    //test moving box
-    ctx.fillStyle = 'rgb(64, 84, 230)';
+    //test moving image
     if (spinning === 0){
-        ctx.fillRect(0, height*0.2, width*0.1, height*0.15);
+        ctx.drawImage(xqcM, width*0.21, height*0.03, imgsize, imgsize);
     };
-    if (spinning === width*0.5){
-        ctx.fillRect(spinning, height*0.2, width*0.1, height*0.15);
-        spinning = 0;
 
+    if (spinning >= height*0.80 - imgsize){
+        ctx.drawImage(xqcM, width*0.21, height*0.82 - imgsize, imgsize, imgsize);
+        spinning = 0;
     };
+
     if (spinning > 0){
-        ctx.fillRect(spinning, height*0.2, width*0.1, height*0.15);
-        spinning +=1;
+        ctx.drawImage(xqcM, width*0.21, height*0.03 + spinning, imgsize, imgsize);
+        spinning += height*0.007;
         window.requestAnimationFrame(drawframe);
     };
+
     //menu box
     if (menu){
         ctx.fillStyle = 'rgb(105, 101, 93, 0.5)';
