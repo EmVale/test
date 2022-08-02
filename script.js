@@ -29,6 +29,41 @@ xqcM.src = './Images/xqcM.png';
 xqcM.onload = () => {
     drawframe();
 };
+var oldreel1 = [xqcM, xqcM, xqcM, xqcM, xqcM];
+var oldreel2 = [xqcM, xqcM, xqcM, xqcM, xqcM];
+var oldreel3 = [xqcM, xqcM, xqcM, xqcM, xqcM];
+var oldreel4 = [xqcM, xqcM, xqcM, xqcM, xqcM];
+var oldreel5 = [xqcM, xqcM, xqcM, xqcM, xqcM];
+var reel1 = [xqcM, xqcM, xqcM, xqcM, xqcM];
+var reel2 = [xqcM, xqcM, xqcM, xqcM, xqcM];
+var reel3 = [xqcM, xqcM, xqcM, xqcM, xqcM];
+var reel4 = [xqcM, xqcM, xqcM, xqcM, xqcM];
+var reel5 = [xqcM, xqcM, xqcM, xqcM, xqcM];
+
+//function to randomly generate new reels
+function rollreels(){
+    oldreel1, oldreel2, oldreel3, oldreel4, oldreel5 = reel1, reel2, reel3, reel4, reel5;
+    reel1 = [xqcM, xqcM, xqcM, xqcM, xqcM];
+    reel2 = [xqcM, xqcM, xqcM, xqcM, xqcM];
+    reel3 = [xqcM, xqcM, xqcM, xqcM, xqcM];
+    reel4 = [xqcM, xqcM, xqcM, xqcM, xqcM];
+    reel5 = [xqcM, xqcM, xqcM, xqcM, xqcM];
+};
+
+//function to display a given reel
+function drawreel(reel, offset){
+    //first symbol
+    ctx.drawImage(reel[0], width*0.21, -height*0.1 - imgsize*5 + offset, imgsize, imgsize);
+    //second symbol
+    ctx.drawImage(reel[0], width*0.21, -height*0.075 - imgsize*4 + offset, imgsize, imgsize);
+    //third symbol
+    ctx.drawImage(reel[0], width*0.21, -height*0.05 - imgsize*3 + offset, imgsize, imgsize);
+    //fourth symbol
+    ctx.drawImage(reel[0], width*0.21, -height*0.025 - imgsize*2 + offset, imgsize, imgsize);
+    //bottom symbol
+    ctx.drawImage(reel[0], width*0.21, -imgsize + offset, imgsize, imgsize);
+
+};
 
 //main function to draw the outer board
 function drawframe(){
@@ -37,13 +72,35 @@ function drawframe(){
     ctx.fillStyle = 'rgb(0, 0, 0)';
     ctx.fillRect(0, 0, width, height);
 
-    //bottom menu bar background
-    ctx.fillStyle = 'rgb(105, 101, 93, 0.5)';
-    ctx.fillRect(0, height*0.85, width, height*0.15);
-
     //reel background
     ctx.fillStyle = 'rgb(106, 121, 145, 0.5)';
-    ctx.fillRect(width*0.19, 0, width*0.62, height*0.85);
+    ctx.fillRect(width*0.19, 0, width*0.62, height*0.855);
+
+     //Not currently spinning
+     if (spinning === 0){
+        drawreel(oldreel1, height*0.825);
+        //ctx.drawImage(xqcM, width*0.21, height*0.03, imgsize, imgsize);
+    };
+
+    //End of spin
+    if (spinning >= height*0.83){
+        drawreel(reel1, height*0.825);
+        //ctx.drawImage(xqcM, width*0.21, height*0.82 - imgsize, imgsize, imgsize);
+        spinning = 0;
+    };
+
+    //Currently Spinning
+    if (spinning > 0){
+        drawreel(oldreel1, height*0.825 + spinning);
+        drawreel(reel1, spinning);
+        //ctx.drawImage(xqcM, width*0.21, height*0.03 + spinning, imgsize, imgsize);
+        spinning += height*0.007;
+        window.requestAnimationFrame(drawframe);
+    };
+
+    //bottom menu bar background
+    ctx.fillStyle = 'rgb(57, 59, 61)';
+    ctx.fillRect(0, height*0.85, width, height*0.15);
 
     //bottom left options button
     ctx.fillStyle = 'rgb(73, 123, 204, 0.5)';
@@ -76,22 +133,6 @@ function drawframe(){
     //spin button
     ctx.fillStyle = 'rgb(43, 117, 73, 0.5)';
     ctx.fillRect(width*0.85, height*0.65, width*0.1, height*0.15);
-
-    //test moving image
-    if (spinning === 0){
-        ctx.drawImage(xqcM, width*0.21, height*0.03, imgsize, imgsize);
-    };
-
-    if (spinning >= height*0.80 - imgsize){
-        ctx.drawImage(xqcM, width*0.21, height*0.82 - imgsize, imgsize, imgsize);
-        spinning = 0;
-    };
-
-    if (spinning > 0){
-        ctx.drawImage(xqcM, width*0.21, height*0.03 + spinning, imgsize, imgsize);
-        spinning += height*0.007;
-        window.requestAnimationFrame(drawframe);
-    };
 
     //menu box
     if (menu){
@@ -152,6 +193,7 @@ canvas.addEventListener('click', function(e) {
         if (isInside(mousePos, spinbox) && balance >= betsizes[betsize]){
             spinning = 1;
             balance -= betsizes[betsize];
+            rollreels();
             drawframe();
         }
         if (isInside(mousePos, menubox)){
