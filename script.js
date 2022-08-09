@@ -10,6 +10,7 @@ var spinning = 0;
 var menu = false;
 var quickspin = false;
 var imgsize = Math.min(width*0.1, height*0.14);
+var symbols = [];
 
 var balance = 500.00;
 
@@ -27,8 +28,56 @@ const quickspinbox = {x:0, y:height*0.75, width:width*0.15, height:height*0.1};
 var xqcM = new Image();
 xqcM.src = './Images/xqcM.png';
 xqcM.onload = () => {
+    symbols.push(xqcM);
+};
+var xqcKek = new Image();
+xqcKek.src = './Images/xqcKek.png';
+xqcKek.onload = () => {
+    symbols.push(xqcKek);
+};
+var xqcF = new Image();
+xqcF.src = './Images/xqcF.png';
+xqcF.onload = () => {
+    symbols.push(xqcF);
+};
+var xqcY = new Image();
+xqcY.src = './Images/xqcY.png';
+xqcY.onload = () => {
+    symbols.push(xqcY);
+};
+var Ace = new Image();
+Ace.src = './Images/Ace.png';
+Ace.onload = () => {
+    symbols.push(Ace);
+};
+var King = new Image();
+King.src = './Images/King.png';
+King.onload = () => {
+    symbols.push(King);
+};
+var Queen = new Image();
+Queen.src = './Images/Queen.png';
+Queen.onload = () => {
+    symbols.push(Queen);
+};
+var Jack = new Image();
+Jack.src = './Images/Jack.png';
+Jack.onload = () => {
+    symbols.push(Jack);
+};
+var Ten = new Image();
+Ten.src = './Images/Ten.png';
+Ten.onload = () => {
+    symbols.push(Ten);
+};
+
+var xqcS = new Image();
+xqcS.src = './Images/xqcS.png';
+xqcS.onload = () => {
+    symbols.push(xqcS);
     drawframe();
 };
+
 var oldreel1 = [xqcM, xqcM, xqcM, xqcM, xqcM];
 var oldreel2 = [xqcM, xqcM, xqcM, xqcM, xqcM];
 var oldreel3 = [xqcM, xqcM, xqcM, xqcM, xqcM];
@@ -40,28 +89,42 @@ var reel3 = [xqcM, xqcM, xqcM, xqcM, xqcM];
 var reel4 = [xqcM, xqcM, xqcM, xqcM, xqcM];
 var reel5 = [xqcM, xqcM, xqcM, xqcM, xqcM];
 
+//function to randomly generate a new reel
+function rollreel(){
+    var ret = [];
+    for (i=0; i < 5; i++){
+        var num = Math.floor(Math.random()*10);
+        ret.push(symbols[num]);
+    };
+    return ret;
+};
+
 //function to randomly generate new reels
 function rollreels(){
-    oldreel1, oldreel2, oldreel3, oldreel4, oldreel5 = reel1, reel2, reel3, reel4, reel5;
-    reel1 = [xqcM, xqcM, xqcM, xqcM, xqcM];
-    reel2 = [xqcM, xqcM, xqcM, xqcM, xqcM];
-    reel3 = [xqcM, xqcM, xqcM, xqcM, xqcM];
-    reel4 = [xqcM, xqcM, xqcM, xqcM, xqcM];
-    reel5 = [xqcM, xqcM, xqcM, xqcM, xqcM];
+    oldreel1 = reel1;
+    oldreel2 = reel2;
+    oldreel3 = reel3;
+    oldreel4 = reel4;
+    oldreel5 = reel5;
+    reel1 = rollreel();
+    reel2 = rollreel();
+    reel3 = rollreel();
+    reel4 = rollreel();
+    reel5 = rollreel();
 };
 
 //function to display a given reel
-function drawreel(reel, offset){
+function drawreel(reel, xpos, offset){
     //first symbol
-    ctx.drawImage(reel[0], width*0.21, -height*0.1 - imgsize*5 + offset, imgsize, imgsize);
+    ctx.drawImage(reel[0], xpos, -height*0.1 - imgsize*5 + offset, imgsize, imgsize);
     //second symbol
-    ctx.drawImage(reel[0], width*0.21, -height*0.075 - imgsize*4 + offset, imgsize, imgsize);
+    ctx.drawImage(reel[1], xpos, -height*0.075 - imgsize*4 + offset, imgsize, imgsize);
     //third symbol
-    ctx.drawImage(reel[0], width*0.21, -height*0.05 - imgsize*3 + offset, imgsize, imgsize);
+    ctx.drawImage(reel[2], xpos, -height*0.05 - imgsize*3 + offset, imgsize, imgsize);
     //fourth symbol
-    ctx.drawImage(reel[0], width*0.21, -height*0.025 - imgsize*2 + offset, imgsize, imgsize);
+    ctx.drawImage(reel[3], xpos, -height*0.025 - imgsize*2 + offset, imgsize, imgsize);
     //bottom symbol
-    ctx.drawImage(reel[0], width*0.21, -imgsize + offset, imgsize, imgsize);
+    ctx.drawImage(reel[4], xpos, -imgsize + offset, imgsize, imgsize);
 
 };
 
@@ -78,23 +141,39 @@ function drawframe(){
 
      //Not currently spinning
      if (spinning === 0){
-        drawreel(oldreel1, height*0.825);
+        drawreel(oldreel1, width*0.21, height*0.825);
+        drawreel(oldreel2, width*0.33, height*0.825);
+        drawreel(oldreel3, width*0.45, height*0.825);
+        drawreel(oldreel4, width*0.57, height*0.825);
+        drawreel(oldreel5, width*0.69, height*0.825);
         //ctx.drawImage(xqcM, width*0.21, height*0.03, imgsize, imgsize);
     };
 
     //End of spin
     if (spinning >= height*0.83){
-        drawreel(reel1, height*0.825);
+        drawreel(reel1, width*0.21, height*0.825);
+        drawreel(reel2, width*0.33, height*0.825);
+        drawreel(reel3, width*0.45, height*0.825);
+        drawreel(reel4, width*0.57, height*0.825);
+        drawreel(reel5, width*0.69, height*0.825);
         //ctx.drawImage(xqcM, width*0.21, height*0.82 - imgsize, imgsize, imgsize);
         spinning = 0;
     };
 
     //Currently Spinning
     if (spinning > 0){
-        drawreel(oldreel1, height*0.825 + spinning);
-        drawreel(reel1, spinning);
+        //drawreel(oldreel1, width*0.21, height*0.825 + spinning);
+        //drawreel(oldreel2, width*0.33, height*0.825 + spinning);
+        //drawreel(oldreel3, width*0.45, height*0.825 + spinning);
+        //drawreel(oldreel4, width*0.57, height*0.825 + spinning);
+        //drawreel(oldreel5, width*0.69, height*0.825 + spinning);
+        drawreel(reel1, width*0.21, spinning);
+        drawreel(reel2, width*0.33, spinning);
+        drawreel(reel3, width*0.45, spinning);
+        drawreel(reel4, width*0.57, spinning);
+        drawreel(reel5, width*0.69, spinning);
         //ctx.drawImage(xqcM, width*0.21, height*0.03 + spinning, imgsize, imgsize);
-        spinning += height*0.007;
+        spinning += height*0.008;
         window.requestAnimationFrame(drawframe);
     };
 
@@ -215,6 +294,7 @@ document.addEventListener('keydown', function(e) {
         if (spinning === 0 && balance >= betsizes[betsize]){
             spinning = 1;
             balance -= betsizes[betsize];
+            rollreels();
             drawframe();
         }
     }
