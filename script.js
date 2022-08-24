@@ -173,7 +173,7 @@ function drawframe(){
         drawreel(reel4, width*0.57, spinning);
         drawreel(reel5, width*0.69, spinning);
         //ctx.drawImage(xqcM, width*0.21, height*0.03 + spinning, imgsize, imgsize);
-        spinning += height*0.008;
+        spinning += height*0.01;
         window.requestAnimationFrame(drawframe);
     };
 
